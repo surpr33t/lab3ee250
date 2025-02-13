@@ -106,8 +106,8 @@ def delete_mail_route(mail_id: str):
     """
     # TODO: implement this function
     if delete_mail(mail_id):
-        return jsonify({"message": "Email has been deleted."}), 200  # ✅ Fixed key from "message:" to "message"
-    return jsonify({"error": "No email found."}), 404  # ✅ Fixed "Error" to lowercase "error"
+        return jsonify({"message": "Email has been deleted."}), 200  
+    return jsonify({"error": "No email found."}), 404 
 
 @app.route('/mail/<mail_id>', methods=['GET'])
 def get_mail_route(mail_id: str):
@@ -123,7 +123,7 @@ def get_mail_route(mail_id: str):
     email = get_mail(mail_id)
     if email:
         return jsonify(email), 200
-    return jsonify({"error": "Email not found"}), 404  # ✅ Added proper error handling if email does not exist
+    return jsonify({"error": "Email not found"}), 404  
 
 @app.route('/mail/inbox/<recipient>', methods=['GET'])
 def get_inbox_route(recipient: str):
