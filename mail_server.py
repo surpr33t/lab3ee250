@@ -4,12 +4,10 @@ import pathlib
 import uuid
 import json
 
-
 app = Flask(__name__)
 thisdir = pathlib.Path(__file__).parent.absolute() # path to directory of this file
 
 # Function to load and save the mail to/from the json file
-
 def load_mail() -> List[Dict[str, str]]:
     """
     Loads the mail from the json file
@@ -108,9 +106,9 @@ def delete_mail_route(mail_id: str):
     """
     # TODO: implement this function
     if delete_mail(mail_id):
-        return jsonify({"message:": "Email has been deleted."}), 200
-    return jsonify({"Error": "No email found."}), 404 
-    
+        return jsonify({"message": "Email has been deleted."}), 200  # ✅ Fixed key from "message:" to "message"
+    return jsonify({"error": "No email found."}), 404  # ✅ Fixed "Error" to lowercase "error"
+
 @app.route('/mail/<mail_id>', methods=['GET'])
 def get_mail_route(mail_id: str):
     """
@@ -122,9 +120,10 @@ def get_mail_route(mail_id: str):
     Returns:
         dict: A dictionary representing the mail entry if it exists, None otherwise
     """
-    res = jsonify(get_mail(mail_id))
-    res.status_code = 200 # Status code for "ok"
-    return res
+    email = get_mail(mail_id)
+    if email:
+        return jsonify(email), 200
+    return jsonify({"error": "Email not found"}), 404  # ✅ Added proper error handling if email does not exist
 
 @app.route('/mail/inbox/<recipient>', methods=['GET'])
 def get_inbox_route(recipient: str):
@@ -143,7 +142,7 @@ def get_inbox_route(recipient: str):
 
 # TODO: implement a rout e to get all mail entries for a sender
 # HINT: start with soemthing like this:
-#   @app.route('/mail/sent/<sender>', ...)
+@app.route('/mail/sent/<sender>', methods=['GET'])
 def get_sent_route(sender: str):
     res = jsonify(get_sent(sender))
     res.status_code = 200
